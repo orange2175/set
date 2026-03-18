@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魔法少女エレメンターデクシード | 魔法少女 エレメンター</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cinzel:wght@400;700&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --text:   #1a1530;
+  --muted:  #7a6a99;
+  --surface:#ffffff;
+  --border: rgba(0,0,0,0.08);
+}
+
+html { scroll-behavior:smooth; }
+body {
+  background: #f8f5ff;
+  color: var(--text);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  overflow-x: hidden;
+}
+
+/* dot grid bg */
+body::after {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* ── NAV ── */
+nav {
+  position: static;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 3rem;
+  background: rgba(248,245,255,0.95);
+  border-bottom: 1px solid rgba(130,90,200,0.13);
+  position: relative; z-index:10;
+}
+.nav-logo {
+  font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.12em;
+  color:#7c3aed; text-decoration:none;
+}
+.nav-logo span { color:#06b6d4; }
+.nav-sns { display:flex; gap:1.2rem; }
+.nav-sns a {
+  font-size:0.72rem; letter-spacing:0.1em;
+  color:var(--muted); text-decoration:none;
+  border:1px solid rgba(130,90,200,0.3); padding:0.3rem 0.8rem;
+  transition:all 0.2s; border-radius:2px;
+}
+.nav-sns a:hover { color:#7c3aed; border-color:#7c3aed; }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  position:relative; z-index:1;
+  padding: 3.5rem 4rem 2.5rem;
+  border-bottom: 1px solid rgba(130,90,200,0.1);
+  background: linear-gradient(135deg, rgba(167,139,250,0.12) 0%, rgba(103,232,249,0.08) 100%);
+}
+.breadcrumb {
+  font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.2em;
+  color:var(--muted); margin-bottom:1rem;
+  display:flex; align-items:center; gap:0.6rem;
+}
+.breadcrumb a { color:var(--muted); text-decoration:none; transition:color 0.2s; }
+.breadcrumb a:hover { color:#7c3aed; }
+.breadcrumb-sep { opacity:0.4; }
+.page-title-en {
+  font-family:'Cinzel',serif; font-size:0.85rem; letter-spacing:0.35em;
+  color:#7c3aed; display:block; margin-bottom:0.5rem;
+}
+.page-title {
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(1.8rem,5vw,3rem); font-weight:700;
+  margin-bottom:0.5rem;
+}
+.page-desc {
+  font-size:0.88rem; color:var(--muted); line-height:1.8;
+}
+
+/* ── CHARACTER CARDS ── */
+.chars-wrap {
+  position:relative; z-index:1;
+  max-width:1100px; margin:0 auto;
+  padding:4rem 2rem 5rem;
+  display:flex; flex-direction:column; gap:5rem;
+}
+
+.char-block {
+  display:grid;
+  grid-template-columns: 300px 1fr;
+  gap:3rem; align-items:start;
+}
+.char-block.reverse { direction:rtl; }
+.char-block.reverse > * { direction:ltr; }
+
+/* image col */
+.char-img-col {
+  position:relative;
+}
+.char-img-frame {
+  position:relative;
+  border: 2px solid var(--c-border, #7c3aed);
+  background: var(--c-bg-light, #f5f0ff);
+  overflow:hidden;
+  box-shadow: 6px 6px 0 var(--c-shadow, rgba(124,58,237,0.2));
+  aspect-ratio: 3/4;
+  display:flex; align-items:flex-end; justify-content:center;
+}
+.char-img-frame img {
+  width:100%; height:100%; object-fit:contain; object-position:center bottom;
+  display:block;
+}
+.char-img-frame::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, transparent, var(--c-main, #7c3aed), transparent);
+}
+.char-gem {
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  width:28px; height:28px; border-radius:50%;
+  background: var(--c-main, #7c3aed);
+  border:3px solid white;
+  box-shadow: 0 0 0 2px var(--c-main, #7c3aed);
+}
+
+/* info col */
+.char-info-col {
+  padding-top:0.5rem;
+}
+.char-codename {
+  font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.3em;
+  color: var(--c-main, #7c3aed); margin-bottom:0.6rem;
+  display:flex; align-items:center; gap:0.8rem;
+}
+.char-codename::after {
+  content:''; flex:0 0 40px; height:1px; background:var(--c-main,#7c3aed); opacity:0.4;
+}
+.char-name-jp {
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(1.6rem,4vw,2.5rem); font-weight:700;
+  line-height:1.2; margin-bottom:0.2rem;
+}
+.char-name-ruby {
+  font-size:0.8rem; color:var(--muted); letter-spacing:0.1em;
+  font-family:'Cinzel',serif; margin-bottom:1.2rem; display:block;
+}
+.char-catch {
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem; font-weight:400;
+  line-height:1.85; color:var(--text);
+  border-left:3px solid var(--c-main,#7c3aed);
+  padding-left:1rem; margin-bottom:1.5rem;
+  background: var(--c-bg-light,#f5f0ff);
+  padding:0.8rem 1rem;
+}
+.char-personality {
+  font-size:0.88rem; color:var(--muted); line-height:1.8; margin-bottom:1.8rem;
+}
+
+.char-battle {
+  margin-bottom:1.8rem;
+}
+.char-section-label {
+  font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.25em;
+  color:var(--c-main,#7c3aed); margin-bottom:0.6rem; text-transform:uppercase;
+}
+.char-tags {
+  display:flex; gap:0.5rem; flex-wrap:wrap;
+}
+.char-tag {
+  font-size:0.72rem; padding:0.3rem 0.9rem;
+  border:1.5px solid var(--c-main,#7c3aed);
+  color:var(--c-main,#7c3aed); border-radius:2px;
+  letter-spacing:0.08em;
+  background: var(--c-bg-light,#f5f0ff);
+}
+
+/* scene links */
+.char-scenes {}
+.scene-links {
+  display:flex; flex-direction:column; gap:0.6rem; margin-top:0.5rem;
+}
+.scene-link {
+  display:flex; align-items:center; gap:0.8rem;
+  padding:0.7rem 1rem;
+  border:1px solid var(--border);
+  background:var(--surface);
+  text-decoration:none; color:var(--text);
+  font-size:0.82rem; letter-spacing:0.06em;
+  border-radius:4px;
+  transition:all 0.2s;
+}
+.scene-link:hover {
+  border-color:var(--c-main,#7c3aed);
+  color:var(--c-main,#7c3aed);
+  background:var(--c-bg-light,#f5f0ff);
+  transform:translateX(4px);
+}
+.scene-link-icon {
+  width:24px; height:24px; border-radius:50%;
+  background:var(--c-main,#7c3aed); opacity:0.15;
+  flex-shrink:0;
+}
+.scene-link:hover .scene-link-icon { opacity:0.3; }
+.scene-link-text { flex:1; }
+.scene-link-arrow { color:var(--muted); font-size:0.8rem; transition:transform 0.2s; }
+.scene-link:hover .scene-link-arrow { transform:translateX(3px); color:var(--c-main,#7c3aed); }
+
+/* divider */
+.char-divider {
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(130,90,200,0.15), transparent);
+}
+
+/* ── FOOTER ── */
+footer {
+  position:relative; z-index:1;
+  border-top:1px solid var(--border);
+  padding:2.5rem 3rem;
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:1rem;
+  background:var(--surface);
+}
+.footer-logo { font-family:'Noto Serif JP',serif; font-size:0.9rem; font-weight:700; color:#7c3aed; }
+.footer-copy { font-size:0.72rem; color:var(--muted); letter-spacing:0.1em; }
+.footer-links { display:flex; gap:1.5rem; }
+.footer-links a { font-size:0.75rem; color:var(--muted); text-decoration:none; letter-spacing:0.1em; transition:color 0.2s; }
+.footer-links a:hover { color:#7c3aed; }
+
+@media(max-width:768px){
+  nav { padding:1rem 1.2rem; }
+  .page-header { padding:2.5rem 1.5rem 2rem; }
+  .chars-wrap { padding:2.5rem 1.2rem; gap:3.5rem; }
+  .char-block, .char-block.reverse { grid-template-columns:1fr; direction:ltr; }
+  .char-img-frame { max-width:240px; margin:0 auto; }
+  footer { padding:2rem 1.5rem; flex-direction:column; text-align:center; }
+  .footer-links { justify-content:center; }
+}
+
+/* toggle */
+.char-toggle { position:relative; }
+.char-toggle.active .img-normal { opacity:0; }
+.char-toggle.active .img-henshin { opacity:1 !important; }
+.char-toggle.active .toggle-hint { opacity:0; }
+.toggle-hint {
+  position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+  font-size:0.65rem; letter-spacing:0.1em; white-space:nowrap;
+  background:rgba(0,0,0,0.45); color:#fff; padding:0.25rem 0.7rem;
+  border-radius:999px; pointer-events:none;
+  transition:opacity 0.3s;
+}
+/* flash effect */
+@keyframes flashIn {
+  0%   { filter:brightness(3) saturate(0); }
+  40%  { filter:brightness(1.8) saturate(1.5); }
+  100% { filter:brightness(1) saturate(1); }
+}
+.char-toggle.flash img { animation: flashIn 0.45s ease forwards; }
+
+
+.char-toggle { position:relative; width:100%; height:100%; cursor:pointer; }
+.char-toggle .img-normal,
+.char-toggle .img-henshin {
+  width:100%; height:100%; object-fit:contain; object-position:center bottom;
+  display:block; position:absolute; inset:0;
+  transition:opacity 0.08s;
+}
+.char-toggle .img-henshin { opacity:0; }
+.char-toggle.active .img-normal { opacity:0; }
+.char-toggle.active .img-henshin { opacity:1; }
+.toggle-hint {
+  position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+  font-size:0.65rem; white-space:nowrap;
+  background:rgba(0,0,0,0.5); color:#fff; padding:0.2rem 0.7rem;
+  border-radius:999px; pointer-events:none; transition:opacity 0.3s;
+  letter-spacing:0.08em;
+}
+.char-toggle.active .toggle-hint { opacity:0; }
+@keyframes flashIn {
+  0%   { filter:brightness(4) saturate(0); }
+  50%  { filter:brightness(2) saturate(2); }
+  100% { filter:brightness(1) saturate(1); }
+}
+.char-toggle.flashing img { animation:flashIn 0.4s ease forwards; }
+
+
+/* ── PROFILE & RELATIONS ── */
+.extra-section {
+  max-width: 1100px; margin: 0 auto;
+  padding: 4rem 0 0;
+  border-top: 1px solid rgba(130,90,200,0.12);
+}
+.extra-title {
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(1.3rem,3vw,1.8rem); font-weight:700;
+  margin-bottom:2rem; letter-spacing:0.05em;
+  display:flex; align-items:center; gap:1rem;
+}
+.extra-title::after {
+  content:''; flex:1; height:1px; background:rgba(130,90,200,0.15);
+}
+
+/* intro box */
+.gen-intro {
+  background:#fff; border:1px solid rgba(130,90,200,0.15);
+  border-left:4px solid #7c3aed;
+  border-radius:0 8px 8px 0;
+  padding:1.5rem 2rem; margin-bottom:3rem;
+  font-size:0.9rem; line-height:1.9; color:#5a6a7a;
+}
+.gen-intro strong { color:#1e1530; }
+
+/* profile cards grid */
+.profile-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr));
+  gap:1.5rem; margin-bottom:4rem;
+}
+.profile-card {
+  background:#fff; border-radius:12px;
+  border:1.5px solid var(--pc-color, rgba(130,90,200,0.2));
+  overflow:hidden; transition:box-shadow 0.2s;
+}
+.profile-card:hover { box-shadow:0 4px 20px rgba(0,0,0,0.07); }
+.profile-card-header {
+  background:var(--pc-color, #7c3aed);
+  padding:0.8rem 1.2rem;
+  display:flex; align-items:center; gap:0.8rem;
+}
+.profile-card-gem {
+  width:10px; height:10px; border-radius:50%;
+  background:rgba(255,255,255,0.5);
+}
+.profile-card-name {
+  font-family:'Noto Serif JP',serif;
+  font-size:1rem; font-weight:700; color:#fff;
+}
+.profile-card-age {
+  font-size:0.7rem; color:rgba(255,255,255,0.75);
+  margin-left:auto; letter-spacing:0.08em;
+}
+.profile-card-body { padding:1rem 1.2rem; }
+.profile-row {
+  display:flex; gap:0.8rem; align-items:baseline;
+  padding:0.4rem 0; border-bottom:1px solid rgba(0,0,0,0.05);
+  font-size:0.82rem;
+}
+.profile-row:last-child { border-bottom:none; }
+.profile-key {
+  color:#8878aa; font-size:0.72rem; letter-spacing:0.1em;
+  min-width:80px; flex-shrink:0;
+}
+.profile-val { color:#1e1530; line-height:1.6; }
+.profile-magic-up {
+  margin-top:0.8rem; padding:0.6rem 0.8rem;
+  background:rgba(124,58,237,0.05); border-radius:6px;
+  border:1px dashed rgba(124,58,237,0.2);
+  font-size:0.75rem; color:#5a4a8a; line-height:1.6;
+}
+.profile-magic-up strong { color:#7c3aed; display:block; margin-bottom:0.2rem; }
+
+/* relations */
+.relations-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(320px,1fr));
+  gap:1.5rem; margin-bottom:4rem;
+}
+.relation-card {
+  background:#fff; border-radius:12px;
+  border:1px solid rgba(130,90,200,0.15);
+  overflow:hidden;
+}
+.relation-card-header {
+  padding:0.7rem 1.2rem;
+  font-family:'Noto Serif JP',serif; font-weight:700; font-size:0.95rem;
+  background:var(--rc-color,#f8f5ff);
+  color:var(--rc-text,#1e1530);
+  border-bottom:1px solid rgba(130,90,200,0.1);
+  display:flex; align-items:center; gap:0.6rem;
+}
+.relation-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--rc-dot,#7c3aed);
+}
+.relation-list { list-style:none; padding:0.5rem 0; }
+.relation-item {
+  display:grid; grid-template-columns:60px 1fr;
+  gap:0.8rem; padding:0.6rem 1.2rem;
+  border-bottom:1px solid rgba(0,0,0,0.04);
+  font-size:0.8rem; align-items:start;
+}
+.relation-item:last-child { border-bottom:none; }
+.relation-who {
+  font-weight:700; color:var(--rc-dot,#7c3aed);
+  font-size:0.75rem; padding-top:0.1rem;
+}
+.relation-memo { color:#4a5568; line-height:1.65; }
+
+/* callname table */
+.callname-wrap { margin-bottom:3rem; overflow-x:auto; }
+.callname-table {
+  width:100%; border-collapse:collapse;
+  font-size:0.82rem;
+}
+.callname-table th, .callname-table td {
+  padding:0.7rem 1rem; text-align:center;
+  border:1px solid rgba(130,90,200,0.12);
+}
+.callname-table th {
+  background:#f8f5ff; font-weight:700;
+  font-family:'Noto Serif JP',serif;
+  font-size:0.78rem; letter-spacing:0.05em;
+}
+.callname-table td { background:#fff; color:#4a5568; }
+.callname-table tr:hover td { background:#faf7ff; }
+.callname-table .self { background:#f8f5ff; color:#8878aa; font-size:0.72rem; }
+
+/* food */
+.food-row {
+  display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:3rem;
+}
+.food-item {
+  flex:1; min-width:140px;
+  background:#fff; border-radius:10px;
+  border:1px solid rgba(130,90,200,0.15);
+  padding:0.9rem 1rem; text-align:center;
+}
+.food-name { font-size:0.72rem; color:#8878aa; margin-bottom:0.3rem; letter-spacing:0.1em; }
+.food-val { font-family:'Noto Serif JP',serif; font-size:0.9rem; font-weight:700; }
+
+
+/* profile row inside char card */
+.char-profile-row {
+  display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.2rem;
+}
+.char-profile-item {
+  display:flex; align-items:baseline; gap:0.4rem;
+  background:#fff; border:1px solid rgba(0,0,0,0.07);
+  border-radius:6px; padding:0.3rem 0.7rem;
+}
+.cpk { font-size:0.62rem; color:#8878aa; letter-spacing:0.1em; flex-shrink:0; }
+.cpv { font-size:0.78rem; color:#1e1530; font-weight:700; }
+
+/* magic box */
+.char-magic-box {
+  border:1.5px solid; border-radius:8px;
+  padding:0.9rem 1.1rem; margin-bottom:1.4rem;
+}
+.char-magic-label {
+  font-size:0.6rem; letter-spacing:0.2em; font-weight:700;
+  text-transform:uppercase; margin-bottom:0.2rem;
+}
+.char-magic-name {
+  font-family:'Noto Serif JP',serif;
+  font-size:1.05rem; font-weight:700; margin-bottom:0.2rem;
+}
+.char-magic-desc { font-size:0.78rem; color:#5a6a7a; }
+
+/* powerup */
+.powerup-box {
+  margin-top:0.7rem; padding-top:0.7rem;
+  border-top:1px dashed rgba(0,0,0,0.1);
+}
+.powerup-label {
+  font-size:0.58rem; letter-spacing:0.18em; color:#8878aa;
+  font-weight:700; margin-bottom:0.15rem;
+}
+.powerup-name {
+  font-size:0.9rem; font-weight:700; color:#1e1530; margin-bottom:0.1rem;
+}
+.powerup-desc { font-size:0.75rem; color:#5a6a7a; }
+
+
+
+/* placeholder frame */
+.placeholder-frame {
+  display:flex; align-items:center; justify-content:center;
+}
+.placeholder-inner {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:0.8rem; width:100%; height:100%;
+}
+.placeholder-icon {
+  font-size:3.5rem; opacity:0.1; color:var(--c-main,#7c3aed); line-height:1;
+}
+.placeholder-label {
+  font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.25em;
+  color:var(--c-main,#7c3aed); opacity:0.4; text-align:center; line-height:1.8;
+}
+
+/* weapon row */
+.weapon-row {
+  display:flex; align-items:baseline; gap:0.6rem; flex-wrap:wrap;
+  margin-top:0.6rem; padding-top:0.6rem;
+  border-top:1px dashed rgba(0,0,0,0.08);
+  font-size:0.78rem;
+}
+.weapon-label {
+  font-size:0.6rem; letter-spacing:0.15em; color:var(--muted); flex-shrink:0;
+}
+.weapon-name { font-weight:700; color:var(--text); }
+.weapon-desc { color:var(--muted); }
+
+/* trouble box */
+.trouble-box {
+  margin-top:1rem;
+  border:1px dashed rgba(200,80,80,0.25); border-radius:6px;
+  padding:0.8rem 1rem;
+  background:rgba(255,80,80,0.03);
+}
+.trouble-label {
+  font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.2em;
+  color:rgba(220,80,80,0.6); margin-bottom:0.3rem;
+}
+.trouble-desc { font-size:0.78rem; color:var(--muted); line-height:1.7; }
+
+/* dexeed header accent */
+.dexeed-tag {
+  display:inline-flex; align-items:center; gap:0.5rem;
+  padding:0.25rem 1rem; border-radius:999px;
+  background:rgba(124,58,237,0.08); border:1px solid rgba(124,58,237,0.2);
+  font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.2em;
+  color:#a060f0; margin-bottom:1rem;
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">ELEMENT<span>ER</span></a>
+  <div class="nav-sns">
+    <a href="https://www.pixiv.net/novel/show.php?id=15118580" target="_blank">pixiv</a>
+    <a href="https://x.com/Grape100000" target="_blank">X (Twitter)</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="index.html">TOP</a>
+    <span class="breadcrumb-sep">／</span>
+    <a href="characters.html">キャラクター</a>
+    <span class="breadcrumb-sep">／</span>
+    <span>デクシード</span>
+  </div>
+  <span class="page-title-en">MAGICAL GIRL ELEMENTER</span>
+  <h1 class="page-title">魔法少女エレメンター<br>デクシード</h1>
+  <p class="page-desc">スイ世代から2年後に生まれた魔法少女たち。チームワークが一番ない、それでも仲が悪いわけではないチーム。</p>
+</div>
+
+<div style="max-width:1100px;margin:0 auto;padding:2rem 2rem 0;">
+  <div class="gen-intro">
+    <strong>【魔法少女エレメンターデクシード】</strong><br>
+    スイ世代から2年後に生まれた魔法少女。開かれたパンドラの箱への厄災に対抗すべく結成された……というよりも各々が好き勝手に立ち上がり、各々が好き勝手に振る舞うだけでチームワークが一番ないチーム。それでも仲が悪い訳ではない。<br>
+    エレメンターという名前は初代エレメンターの振るっていた武器とスイたちにアクアが肖った。
+  </div>
+</div>
+
+<div class="chars-wrap">
+
+  <!-- ── 水原 アクア ── -->
+  <div class="char-block " style="--c-main:#1e90ff; --c-border:#1e90ff; --c-bg-light:#eef6ff; --c-shadow:rgba(30,144,255,0.2);">
+    <div class="char-img-col">
+      <div class="char-gem" style="background:#1e90ff;"></div>
+      <div class="char-img-frame placeholder-frame">
+        <div class="placeholder-inner">
+          <div class="placeholder-icon">✦</div>
+          <div class="placeholder-label">IMAGE COMING SOON<br>水原 アクア</div>
+        </div>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ MYSTIC SAPPHIRE</div>
+      <div class="char-name-jp">水原 アクア</div>
+      <span class="char-name-ruby">Mizuhara Aqua</span>
+      <div class="char-catch">世界一かわいい自分がアイドルにならないのは、世界の損失。</div>
+      <p class="char-personality">超ナルシストで自己肯定感の塊。自分の可愛さを信じて疑わないが、世界を守る使命には厚い。美しさより"可愛さ"を最重要視。ゲテモノ料理でも"美"を見出す独特のセンス。趣味は自撮り、チャンスが来たときは指でフレームを作る癖がある。夢は誰もが振り返るような超（スーパー）アイドル。</p>
+      <div class="char-profile-row">
+        <div class="char-profile-item"><span class="cpk">年齢</span><span class="cpv">14歳（中学2年生）</span></div>
+        <div class="char-profile-item"><span class="cpk">属性</span><span class="cpv">水</span></div>
+        
+      </div>
+      <div class="char-magic-box" style="border-color:#1e90ff25; background:#eef6ff;">
+        <div class="char-magic-label" style="color:#1e90ff;">魔法少女名 / 能力</div>
+        <div class="char-magic-name" style="color:#1e90ff;">ミスティック・サファイア</div>
+        <div class="char-magic-desc">水の魔法 ＋ カンフー系格闘術。</div>
+        
+        
+          <div class="powerup-box">
+            <div class="powerup-label">SPECIAL MOVE</div>
+            <div class="powerup-name">「オンリーステージ」</div>
+            <div class="powerup-desc">特殊な空間を展開し、敵味方問わずアクアに視線が釘付けになる。攻撃も全てアクアに集中するが、それを蓄積して一度だけ数倍のカウンター攻撃として返す。</div>
+          </div>
+      </div>
+      <div class="char-battle">
+        <div class="char-section-label">Battle Style</div>
+        <div class="char-tags"><span class="char-tag">水魔法</span><span class="char-tag">カンフー</span><span class="char-tag">カウンター</span></div>
+      </div>
+      
+      <div class="trouble-box">
+        <div class="trouble-label">INNER CONFLICT</div>
+        <div class="trouble-desc">両親に甘やかされて育ったため自己肯定感が高く不幸を知らない性質。→ならばそんな世界一かわいい自分がアイドルにならないのは世界の損失→美しさのためになら努力を惜しまない。</div>
+      </div>
+    </div>
+  </div>
+  <div class="char-divider"></div>
+  <!-- ── フレア＝バルキリー ── -->
+  <div class="char-block reverse" style="--c-main:#e03050; --c-border:#e03050; --c-bg-light:#fff0f2; --c-shadow:rgba(224,48,80,0.2);">
+    <div class="char-img-col">
+      <div class="char-gem" style="background:#e03050;"></div>
+      <div class="char-img-frame placeholder-frame">
+        <div class="placeholder-inner">
+          <div class="placeholder-icon">✦</div>
+          <div class="placeholder-label">IMAGE COMING SOON<br>フレア＝バルキリー</div>
+        </div>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ BURNING RUBY</div>
+      <div class="char-name-jp">フレア＝バルキリー</div>
+      <span class="char-name-ruby">Flair Valkyrie</span>
+      <div class="char-catch">約束を守ることにかけては、命をかける。</div>
+      <p class="char-personality">ダウナー気質だが正義感が強く、現在は何でも屋を営む。例え車に轢かれても崖から落ちても、必要とあらば他人を脅してでも約束を守る。過去のトラウマから精神的に不安定で一人になると独り言が多くなる。他人を遠ざけがちだが人恋しく、人の多いファミレスや遊園地が好き。アクアに対してやたら湿度が高い。</p>
+      <div class="char-profile-row">
+        <div class="char-profile-item"><span class="cpk">年齢</span><span class="cpv">15歳</span></div>
+        <div class="char-profile-item"><span class="cpk">属性</span><span class="cpv">火</span></div>
+        <div class="char-profile-item"><span class="cpk">仕事</span><span class="cpv">何でも屋</span></div>
+      </div>
+      <div class="char-magic-box" style="border-color:#e0305025; background:#fff0f2;">
+        <div class="char-magic-label" style="color:#e03050;">魔法少女名 / 能力</div>
+        <div class="char-magic-name" style="color:#e03050;">バーニング・ルビー</div>
+        <div class="char-magic-desc">炎の魔法。体よりも巨大なハンマーを腕力に任せて振り回す。</div>
+        <div class="weapon-row"><span class="weapon-label">武器</span><span class="weapon-name">「バーニング・ハンマー」</span><span class="weapon-desc">体よりも巨大なハンマー。腕力に任せて振り回す。</span></div>
+        
+      </div>
+      <div class="char-battle">
+        <div class="char-section-label">Battle Style</div>
+        <div class="char-tags"><span class="char-tag">炎魔法</span><span class="char-tag">近接</span><span class="char-tag">パワー型</span></div>
+      </div>
+      
+      <div class="trouble-box">
+        <div class="trouble-label">INNER CONFLICT</div>
+        <div class="trouble-desc">同じ夢を叶えようとした友人がいたが、夢を叶えられたのは友人だけ。その後も才能の壁・実力の壁に何度もぶつかり、夢を持つことに冷めている。</div>
+      </div>
+    </div>
+  </div>
+  <div class="char-divider"></div>
+  <!-- ── 風鈴 カザミ ── -->
+  <div class="char-block " style="--c-main:#16a34a; --c-border:#16a34a; --c-bg-light:#f0fdf4; --c-shadow:rgba(22,163,74,0.2);">
+    <div class="char-img-col">
+      <div class="char-gem" style="background:#16a34a;"></div>
+      <div class="char-img-frame placeholder-frame">
+        <div class="placeholder-inner">
+          <div class="placeholder-icon">✦</div>
+          <div class="placeholder-label">IMAGE COMING SOON<br>風鈴 カザミ</div>
+        </div>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ PERSONA EMERALD</div>
+      <div class="char-name-jp">風鈴 カザミ</div>
+      <span class="char-name-ruby">Kazami Kazami</span>
+      <div class="char-catch">普段は臆病でも、変身すれば最強のヒーロー。</div>
+      <p class="char-personality">普段は臆病で内気だが、「エメラルド」という名で魔法少女姿のままネットアイドル活動をしている。配信中はキザで自意識過剰。すべてのことを"ゲーム"に例える話し方をする。「ペルソナ・エメラルド」は妄想していた"理想のヒーロー"の姿。だが過去のトラウマから自己防衛のための虚勢の面もある。</p>
+      <div class="char-profile-row">
+        <div class="char-profile-item"><span class="cpk">年齢</span><span class="cpv">14歳（中学2年生）</span></div>
+        <div class="char-profile-item"><span class="cpk">属性</span><span class="cpv">風</span></div>
+        <div class="char-profile-item"><span class="cpk">活動</span><span class="cpv">ネットアイドル（魔法少女姿）</span></div>
+      </div>
+      <div class="char-magic-box" style="border-color:#16a34a25; background:#f0fdf4;">
+        <div class="char-magic-label" style="color:#16a34a;">魔法少女名 / 能力</div>
+        <div class="char-magic-name" style="color:#16a34a;">ペルソナ・エメラルド</div>
+        <div class="char-magic-desc">風の魔法。コピー能力：1分間相手を凝視すると仮面を精製し、それを被ることで能力をコピーできる（風以外の属性も可）。</div>
+        <div class="weapon-row"><span class="weapon-label">武器</span><span class="weapon-name">「ストーム・ブレード」</span><span class="weapon-desc">二対の刀。</span></div>
+        
+      </div>
+      <div class="char-battle">
+        <div class="char-section-label">Battle Style</div>
+        <div class="char-tags"><span class="char-tag">風魔法</span><span class="char-tag">コピー能力</span><span class="char-tag">二刀流</span></div>
+      </div>
+      
+    </div>
+  </div>
+  <div class="char-divider"></div>
+  <!-- ── ディード＝テルシア ── -->
+  <div class="char-block reverse" style="--c-main:#c8960a; --c-border:#c8960a; --c-bg-light:#fffbec; --c-shadow:rgba(200,150,10,0.2);">
+    <div class="char-img-col">
+      <div class="char-gem" style="background:#c8960a;"></div>
+      <div class="char-img-frame placeholder-frame">
+        <div class="placeholder-inner">
+          <div class="placeholder-icon">✦</div>
+          <div class="placeholder-label">IMAGE COMING SOON<br>ディード＝テルシア</div>
+        </div>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ MAD TOPAZ</div>
+      <div class="char-name-jp">ディード＝テルシア</div>
+      <span class="char-name-ruby">Deed Tertia</span>
+      <div class="char-catch">今を変えられないお祈りより、未来を変えられる魔法少女。</div>
+      <p class="char-personality">元聖職者だったが肉も魚も食べる破戒僧。穏やかに見えて口八丁の詐欺師でもある。博打好きで「博打だけはやめられない」。今を変えられないお祈りよりも未来を変えられる魔法少女に強い憧れと尊敬を抱く。</p>
+      <div class="char-profile-row">
+        <div class="char-profile-item"><span class="cpk">年齢</span><span class="cpv">16歳</span></div>
+        <div class="char-profile-item"><span class="cpk">属性</span><span class="cpv">土</span></div>
+        <div class="char-profile-item"><span class="cpk">元職業</span><span class="cpv">聖職者</span></div><div class="char-profile-item"><span class="cpk">趣味</span><span class="cpv">博打</span></div>
+      </div>
+      <div class="char-magic-box" style="border-color:#c8960a25; background:#fffbec;">
+        <div class="char-magic-label" style="color:#c8960a;">魔法少女名 / 能力</div>
+        <div class="char-magic-name" style="color:#c8960a;">マッド・トパーズ</div>
+        <div class="char-magic-desc">土の魔法 ＋ 磁力操作。対象にN極またはS極を付与し、磁力を利用した攻撃や戦術が可能。</div>
+        <div class="weapon-row"><span class="weapon-label">武器</span><span class="weapon-name">「グランド・ランス」</span><span class="weapon-desc">手に余るほど巨大な槍。</span></div>
+        
+      </div>
+      <div class="char-battle">
+        <div class="char-section-label">Battle Style</div>
+        <div class="char-tags"><span class="char-tag">土魔法</span><span class="char-tag">磁力操作</span><span class="char-tag">大槍</span></div>
+      </div>
+      
+    </div>
+  </div>
+  <div class="char-divider"></div>
+</div>
+
+<footer>
+  <div class="footer-logo">魔法少女 エレメンター</div>
+  <div class="footer-links">
+    <a href="https://www.pixiv.net/novel/show.php?id=15118580" target="_blank">pixiv</a>
+    <a href="https://x.com/Grape100000" target="_blank">X (Twitter)</a>
+    <a href="characters.html">キャラクター一覧</a>
+    <a href="index.html">TOP</a>
+  </div>
+  <div class="footer-copy">© 俺ンジ / Elementer Project</div>
+</footer>
+
+</body>
+</html>

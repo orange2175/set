@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魔法少女フォーチュンガールズ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;700&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:     #0d0a18;
+  --bg2:    #13102a;
+  --surface:#1a1535;
+  --gold:   #c9a84c;
+  --gold2:  #f0d080;
+  --ivory:  #ede8d8;
+  --muted:  #8a7fa8;
+  --border: rgba(201,168,76,0.18);
+  --border2:rgba(201,168,76,0.4);
+  --ray:    #e8c060;   /* アカリ */
+  --infi:   #7b68ee;  /* トコナ */
+}
+
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--ivory);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* starfield */
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(1px 1px at 8% 12%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 22% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 38% 28%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 51% 78%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 66% 18%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 77% 62%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 89% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 14% 88%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 44% 95%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 93% 82%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 5%,  rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 42%, rgba(255,255,255,0.35) 0%, transparent 100%);
+}
+
+/* gold gradient mesh */
+body::after {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(201,168,76,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 85% 75%, rgba(123,104,238,0.08) 0%, transparent 60%);
+}
+
+/* ── NAV ── */
+nav {
+  position:static; z-index:10;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.1rem 3rem;
+  background:rgba(13,10,24,0.9);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo {
+  font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.12em;
+  color:var(--gold); text-decoration:none;
+  text-shadow:0 0 16px rgba(201,168,76,0.4);
+}
+.nav-logo span { color:var(--infi); }
+.nav-sns { display:flex; gap:1.2rem; }
+.nav-sns a {
+  font-size:0.72rem; letter-spacing:0.1em; color:var(--muted);
+  text-decoration:none; border:1px solid var(--border); padding:0.3rem 0.8rem;
+  transition:all 0.2s; border-radius:2px;
+}
+.nav-sns a:hover { color:var(--gold); border-color:var(--gold); }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  position:relative; z-index:1;
+  text-align:center; padding:4rem 2rem 3rem;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+
+/* arcana circle deco */
+.header-circle {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:420px; height:420px; border-radius:50%;
+  border:1px solid rgba(201,168,76,0.08);
+  pointer-events:none;
+  animation:spin 80s linear infinite;
+}
+.header-circle::before {
+  content:''; position:absolute; inset:30px; border-radius:50%;
+  border:1px solid rgba(123,104,238,0.07);
+  animation:spin 50s linear infinite reverse;
+}
+
+.breadcrumb {
+  font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.2em;
+  color:var(--muted); margin-bottom:1.5rem; position:relative; z-index:2;
+  display:flex; align-items:center; gap:0.6rem; justify-content:center;
+}
+.breadcrumb a { color:var(--muted); text-decoration:none; transition:color 0.2s; }
+.breadcrumb a:hover { color:var(--gold); }
+.breadcrumb-sep { opacity:0.4; }
+
+.header-eyebrow {
+  font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.4em;
+  color:var(--gold); margin-bottom:0.8rem; position:relative; z-index:2;
+  display:flex; align-items:center; justify-content:center; gap:1rem;
+}
+.header-eyebrow::before, .header-eyebrow::after {
+  content:''; display:inline-block; width:40px; height:1px; background:var(--gold); opacity:0.4;
+}
+.page-title {
+  font-family:'Cinzel Decorative', serif;
+  font-size:clamp(1.4rem,4vw,2.8rem); font-weight:700;
+  line-height:1.3; letter-spacing:0.05em;
+  background:linear-gradient(135deg, var(--gold2) 0%, var(--gold) 50%, var(--ivory) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:0.6rem; position:relative; z-index:2;
+}
+.page-subtitle {
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(1rem,2vw,1.3rem); font-weight:300;
+  color:var(--muted); letter-spacing:0.12em; margin-bottom:1.5rem;
+  position:relative; z-index:2;
+}
+.page-desc {
+  font-size:0.88rem; color:var(--muted); line-height:1.9; max-width:560px;
+  margin:0 auto; position:relative; z-index:2;
+  font-family:'Noto Serif JP',serif; font-weight:300;
+}
+
+/* ── TAROT DIVIDER ── */
+.tarot-divider {
+  display:flex; align-items:center; gap:1.5rem;
+  padding:2rem 3rem 0; max-width:1100px; margin:0 auto;
+  color:var(--border2); font-size:1rem;
+}
+.tarot-divider span { flex:1; height:1px; background:var(--border); }
+
+/* ── CHAR SECTION ── */
+.chars-wrap {
+  position:relative; z-index:1;
+  max-width:1100px; margin:0 auto;
+  padding:3rem 2rem 5rem;
+  display:flex; flex-direction:column; gap:5rem;
+}
+
+/* tarot card frame */
+.char-block {
+  display:grid; grid-template-columns:280px 1fr;
+  gap:3.5rem; align-items:start;
+}
+.char-block.reverse { direction:rtl; }
+.char-block.reverse > * { direction:ltr; }
+
+.char-img-col { position:relative; }
+
+.tarot-card {
+  position:relative;
+  border:1.5px solid var(--c-border, var(--border2));
+  background:var(--surface);
+  aspect-ratio:2/3;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  overflow:hidden;
+  box-shadow:0 0 40px var(--c-glow, rgba(201,168,76,0.15)), 0 0 0 4px var(--bg2);
+}
+.tarot-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, transparent, var(--c-main, var(--gold)), transparent);
+}
+.tarot-card::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, transparent, var(--c-main, var(--gold)), transparent);
+}
+.tarot-corner {
+  position:absolute; width:14px; height:14px;
+  border-color:var(--c-main, var(--gold)); border-style:solid; opacity:0.6;
+}
+.tarot-corner.tl { top:8px; left:8px; border-width:1px 0 0 1px; }
+.tarot-corner.tr { top:8px; right:8px; border-width:1px 1px 0 0; }
+.tarot-corner.bl { bottom:8px; left:8px; border-width:0 0 1px 1px; }
+.tarot-corner.br { bottom:8px; right:8px; border-width:0 1px 1px 0; }
+
+.tarot-placeholder {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:0.8rem; padding:2rem;
+  width:100%; height:100%;
+}
+.tarot-placeholder-arcana {
+  font-family:'Cinzel Decorative',serif;
+  font-size:3.5rem; opacity:0.1; color:var(--c-main, var(--gold));
+  line-height:1;
+}
+.tarot-placeholder-label {
+  font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.3em;
+  color:var(--c-main, var(--gold)); opacity:0.4; text-align:center;
+}
+
+/* roman numeral at top of card */
+.tarot-num {
+  position:absolute; top:14px; left:50%; transform:translateX(-50%);
+  font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em;
+  color:var(--c-main, var(--gold)); opacity:0.5;
+}
+.tarot-bottom-name {
+  position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+  font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.25em;
+  color:var(--c-main, var(--gold)); opacity:0.4; white-space:nowrap;
+}
+
+/* ── INFO COL ── */
+.char-info-col { padding-top:0.5rem; }
+
+.char-codename {
+  font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.3em;
+  color:var(--c-main, var(--gold)); margin-bottom:0.5rem;
+  display:flex; align-items:center; gap:0.8rem;
+}
+.char-codename::after { content:''; flex:0 0 36px; height:1px; background:var(--c-main,var(--gold)); opacity:0.35; }
+
+.char-name-jp {
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(1.6rem,3.5vw,2.3rem); font-weight:700;
+  line-height:1.2; margin-bottom:0.2rem; color:var(--ivory);
+}
+.char-name-ruby {
+  font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.2em;
+  color:var(--c-main, var(--gold)); display:block; margin-bottom:1rem;
+}
+
+.char-catch {
+  font-family:'Noto Serif JP',serif; font-weight:300;
+  font-size:0.95rem; line-height:2;
+  border-left:2px solid var(--c-main, var(--gold));
+  padding:0.6rem 1rem; margin-bottom:1.2rem;
+  background:rgba(255,255,255,0.03); color:var(--ivory);
+  letter-spacing:0.04em;
+}
+
+.char-personality {
+  font-size:0.84rem; color:var(--muted); line-height:1.85; margin-bottom:1.4rem;
+}
+
+/* profile pills */
+.char-profile-row {
+  display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.3rem;
+}
+.char-profile-item {
+  display:flex; align-items:baseline; gap:0.4rem;
+  background:rgba(255,255,255,0.04); border:1px solid var(--border);
+  border-radius:4px; padding:0.3rem 0.75rem;
+}
+.cpk { font-size:0.6rem; color:var(--muted); letter-spacing:0.12em; flex-shrink:0; }
+.cpv { font-size:0.78rem; color:var(--ivory); font-weight:700; }
+
+/* magic box */
+.char-magic-box {
+  border:1px solid var(--border2); border-radius:6px;
+  padding:1rem 1.2rem; margin-bottom:1.3rem;
+  background:rgba(255,255,255,0.03);
+  position:relative; overflow:hidden;
+}
+.char-magic-box::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:2px;
+  background:var(--c-main, var(--gold));
+}
+.char-magic-label {
+  font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.22em;
+  margin-bottom:0.25rem; color:var(--c-main, var(--gold));
+}
+.char-magic-name {
+  font-family:'Noto Serif JP',serif; font-size:1rem; font-weight:700;
+  color:var(--ivory); margin-bottom:0.2rem;
+}
+.char-magic-desc { font-size:0.78rem; color:var(--muted); line-height:1.65; }
+
+/* weak box */
+.char-weak-box {
+  border:1px dashed rgba(255,100,100,0.25); border-radius:6px;
+  padding:0.8rem 1rem; margin-bottom:1.3rem;
+  background:rgba(255,80,80,0.04);
+}
+.char-weak-label {
+  font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.2em;
+  color:rgba(255,120,120,0.7); margin-bottom:0.25rem;
+}
+.char-weak-desc { font-size:0.78rem; color:var(--muted); line-height:1.65; }
+
+/* relation box */
+.char-rel-box {
+  border:1px solid var(--border); border-radius:6px;
+  padding:0.8rem 1rem;
+  background:rgba(255,255,255,0.02); font-size:0.8rem;
+  color:var(--muted); line-height:1.75;
+}
+.char-rel-label {
+  font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.2em;
+  color:var(--muted); margin-bottom:0.3rem;
+}
+
+.char-divider {
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent);
+}
+
+/* ── RELATION SECTION ── */
+.extra-section {
+  max-width:1100px; margin:0 auto;
+  padding:3rem 2rem 0;
+  border-top:1px solid var(--border);
+}
+.extra-title {
+  font-family:'Cinzel',serif;
+  font-size:clamp(1rem,2.5vw,1.4rem); font-weight:700;
+  color:var(--gold); margin-bottom:1.8rem; letter-spacing:0.1em;
+  display:flex; align-items:center; gap:1rem;
+}
+.extra-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.rel-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:1.5rem 2rem;
+  font-size:0.85rem; line-height:1.9; color:var(--muted);
+}
+.rel-card strong { color:var(--ivory); }
+.rel-highlight {
+  display:inline-block; margin-top:1rem; padding:0.6rem 1.2rem;
+  border:1px solid var(--border2); border-radius:4px;
+  font-family:'Noto Serif JP',serif; font-size:0.82rem;
+  color:var(--gold); font-weight:300; letter-spacing:0.05em;
+  background:rgba(201,168,76,0.05);
+}
+
+/* ── FOOTER ── */
+footer {
+  position:relative; z-index:1;
+  border-top:1px solid var(--border);
+  padding:2.5rem 3rem;
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:1rem;
+  background:rgba(13,10,24,0.8);
+}
+.footer-logo { font-family:'Noto Serif JP',serif; font-size:0.9rem; font-weight:700; color:var(--gold); }
+.footer-copy { font-size:0.7rem; color:var(--muted); letter-spacing:0.1em; }
+.footer-links { display:flex; gap:1.5rem; }
+.footer-links a { font-size:0.75rem; color:var(--muted); text-decoration:none; letter-spacing:0.1em; transition:color 0.2s; }
+.footer-links a:hover { color:var(--gold); }
+
+@keyframes spin { to { transform:rotate(360deg); } }
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+@media(max-width:768px){
+  nav { padding:1rem 1.2rem; }
+  .chars-wrap { padding:2rem 1.2rem; gap:3.5rem; }
+  .char-block, .char-block.reverse { grid-template-columns:1fr; direction:ltr; }
+  .tarot-card { max-width:220px; margin:0 auto; }
+  footer { padding:2rem 1.5rem; flex-direction:column; text-align:center; }
+  .footer-links { justify-content:center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">ELEMENT<span>ER</span></a>
+  <div class="nav-sns">
+    <a href="https://www.pixiv.net/novel/show.php?id=15118580" target="_blank">pixiv</a>
+    <a href="https://x.com/Grape100000" target="_blank">X (Twitter)</a>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="header-circle"></div>
+  <div class="breadcrumb">
+    <a href="index.html">TOP</a>
+    <span class="breadcrumb-sep">／</span>
+    <a href="characters.html">キャラクター</a>
+    <span class="breadcrumb-sep">／</span>
+    <span>フォーチュンガールズ</span>
+  </div>
+  <div class="header-eyebrow">MAGICAL GIRL</div>
+  <h1 class="page-title">Fortune Girls</h1>
+  <p class="page-subtitle">魔法少女フォーチュンガールズ</p>
+  <p class="page-desc">
+    世界の運命を決めるタロットカードによるバトルロイヤル。<br>
+    その渦中の中で生まれた魔法少女たち。
+  </p>
+</div>
+
+<!-- CHARS -->
+<div class="chars-wrap">
+
+  <!-- ── アカリ ── -->
+  <div class="char-block" style="--c-main:#c9a84c; --c-border:rgba(201,168,76,0.4); --c-glow:rgba(201,168,76,0.15);">
+    <div class="char-img-col">
+      <div class="tarot-card">
+        <div class="tarot-corner tl"></div><div class="tarot-corner tr"></div>
+        <div class="tarot-corner bl"></div><div class="tarot-corner br"></div>
+        <span class="tarot-num">XVIII</span>
+        <div class="tarot-placeholder">
+          <div class="tarot-placeholder-arcana">☀</div>
+          <div class="tarot-placeholder-label">IMAGE COMING SOON<br>白井 アカリ</div>
+        </div>
+        <span class="tarot-bottom-name">FORTUNE · RAY</span>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ THE SUN · フォーチュン・レイ</div>
+      <div class="char-name-jp">白井 アカリ</div>
+      <span class="char-name-ruby">Shirai Akari</span>
+      <div class="char-catch">
+        「自分のために戦う」という信念。<br>斜に構えながらも、根は優しい。
+      </div>
+      <p class="char-personality">
+        内向的で冷静、理屈っぽく斜に構えがち。口調はやや刺々しいこともあるが根は優しい。
+        少々中学生らしからぬ枯れた部分もあるが、唯一心を開いていた皮肉屋な祖母の受け売り。
+        タロット占いが趣味だが人を占ったりはせず、自分へのゲン担ぎや勇気づけに使うだけ。
+      </p>
+      <div class="char-profile-row">
+        <div class="char-profile-item"><span class="cpk">スタンス</span><span class="cpv">自分のために戦う</span></div>
+        <div class="char-profile-item"><span class="cpk">趣味</span><span class="cpv">タロット占い（自分用）</span></div>
+      </div>
+      <div class="char-magic-box">
+        <div class="char-magic-label">MAGICAL NAME</div>
+        <div class="char-magic-name">フォーチュン・レイ</div>
+        <div class="char-magic-desc">冷静な観察眼と計算で立ち回る。感情的になる場面もあるが、基本は冷静沈着な判断型。</div>
+      </div>
+      <div class="char-weak-box">
+        <div class="char-weak-label">WEAKNESS</div>
+        <div class="char-weak-desc">羞恥や周囲の目に敏感で、身体的な拘束などに特に強く反応する。自分のペースを乱されることを嫌う。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="char-divider"></div>
+
+  <!-- ── トコナ ── -->
+  <div class="char-block reverse" style="--c-main:#9b8fe0; --c-border:rgba(155,143,224,0.4); --c-glow:rgba(123,104,238,0.15);">
+    <div class="char-img-col">
+      <div class="tarot-card">
+        <div class="tarot-corner tl"></div><div class="tarot-corner tr"></div>
+        <div class="tarot-corner bl"></div><div class="tarot-corner br"></div>
+        <span class="tarot-num">0</span>
+        <div class="tarot-placeholder">
+          <div class="tarot-placeholder-arcana">☽</div>
+          <div class="tarot-placeholder-label">IMAGE COMING SOON<br>黒井 トコナ</div>
+        </div>
+        <span class="tarot-bottom-name">FORTUNE · INFI</span>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ THE FOOL · フォーチュン・インフィ</div>
+      <div class="char-name-jp">黒井 トコナ</div>
+      <span class="char-name-ruby">Kuroi Tokona</span>
+      <div class="char-catch">
+        記憶喪失でも前向き。<br>どんな状況でも諦めない。
+      </div>
+      <p class="char-personality">
+        明るく元気、やや天然でマイペース。周囲の空気を柔らかくする存在。
+        記憶喪失だが前向きで、アカリに対して強い信頼を抱いている。
+        一見のんびりしているが、戦闘では本能的な鋭さを発揮する。
+        感情が言葉にストレートに出る飄々とした口調。
+      </p>
+      <div class="char-profile-row">
+        <div class="char-profile-item"><span class="cpk">特性</span><span class="cpv">記憶喪失・前向き</span></div>
+        <div class="char-profile-item"><span class="cpk">長所</span><span class="cpv">本能的な鋭さ（戦闘時）</span></div>
+      </div>
+      <div class="char-magic-box">
+        <div class="char-magic-label">MAGICAL NAME</div>
+        <div class="char-magic-name">フォーチュン・インフィ</div>
+        <div class="char-magic-desc">本能と直感で動く戦闘スタイル。のんびりした外見に反し、いざとなれば誰より鋭く動く。</div>
+      </div>
+      <div class="char-rel-box">
+        <div class="char-rel-label">RELATIONSHIP NOTE</div>
+        アカリにとってはビジネスパートナー感覚で「トコナさん」と他人行儀な呼び方。
+        トコナは距離を縮めたいと思っているが、アカリを気遣って一線引いている。
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATION SECTION -->
+  <div class="extra-section">
+    <h2 class="extra-title">ふたりの関係</h2>
+    <div class="rel-card">
+      <strong>アカリ → トコナ：</strong>ビジネスパートナー感覚。「トコナさん」と他人行儀に呼ぶ。<br>
+      <strong>トコナ → アカリ：</strong>強い信頼と親しみ。距離を縮めたいが、アカリを気遣って一線を引いている。
+      <br>
+      <div class="rel-highlight">
+        ✦ &nbsp;距離感のすれ違いが、ふたりの物語の軸のひとつ。
+      </div>
+    </div>
+  </div>
+
+</div><!-- /chars-wrap -->
+
+<footer>
+  <div class="footer-logo">魔法少女フォーチュンガールズ</div>
+  <div class="footer-links">
+    <a href="https://www.pixiv.net/novel/show.php?id=15118580" target="_blank">pixiv</a>
+    <a href="https://x.com/Grape100000" target="_blank">X (Twitter)</a>
+    <a href="characters.html">キャラクター一覧</a>
+    <a href="index.html">TOP</a>
+  </div>
+  <div class="footer-copy">© 俺ンジ / Elementer Project</div>
+</footer>
+
+</body>
+</html>

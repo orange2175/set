@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>冥闇の四姉妹 | 魔法少女 エレメンター</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;700&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:    #050208;
+  --bg2:   #0a0510;
+  --surface:#100818;
+  --text:  #e0d0f0;
+  --muted: #7060a0;
+  --border:rgba(180,80,255,0.12);
+  --border2:rgba(180,80,255,0.3);
+  /* per-char colors */
+  --cosmi: #c040ff;
+  --keat:  #20d8a0;
+  --shao:  #ff4040;
+  --mani:  #40a0ff;
+}
+
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  overflow-x:hidden;
+}
+
+/* animated bg */
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(192,64,255,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 70% at 80% 90%, rgba(255,64,64,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(32,216,160,0.04) 0%, transparent 60%);
+  animation: bgpulse 8s ease-in-out infinite alternate;
+}
+@keyframes bgpulse {
+  from { opacity:0.6; }
+  to   { opacity:1; }
+}
+
+/* crack lines */
+body::after {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(135deg, rgba(180,80,255,0.025) 1px, transparent 1px),
+    linear-gradient(45deg,  rgba(180,80,255,0.015) 1px, transparent 1px);
+  background-size:60px 60px, 40px 40px;
+}
+
+/* ── NAV ── */
+nav {
+  position:static; z-index:10;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.1rem 3rem;
+  background:rgba(5,2,8,0.95);
+  border-bottom:1px solid var(--border2);
+}
+.nav-logo {
+  font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.12em;
+  color:var(--cosmi); text-decoration:none;
+  text-shadow:0 0 20px rgba(192,64,255,0.5);
+}
+.nav-logo span { color:var(--mani); }
+.nav-sns { display:flex; gap:1.2rem; }
+.nav-sns a {
+  font-size:0.72rem; letter-spacing:0.1em; color:var(--muted);
+  text-decoration:none; border:1px solid var(--border); padding:0.3rem 0.8rem;
+  transition:all 0.2s; border-radius:2px;
+}
+.nav-sns a:hover { color:var(--cosmi); border-color:var(--cosmi); }
+
+/* ── HERO HEADER ── */
+.page-hero {
+  position:relative; z-index:1;
+  min-height:52vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:5rem 2rem 4rem;
+  overflow:hidden;
+  border-bottom:1px solid var(--border2);
+}
+
+/* giant eye bg */
+.hero-eye {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:500px; height:500px; border-radius:50%;
+  border:1px solid rgba(192,64,255,0.06);
+  pointer-events:none;
+  animation:spin 120s linear infinite;
+}
+.hero-eye::before {
+  content:''; position:absolute; inset:40px; border-radius:50%;
+  border:1px solid rgba(255,64,64,0.05);
+  animation:spin 80s linear infinite reverse;
+}
+.hero-eye::after {
+  content:''; position:absolute; inset:100px; border-radius:50%;
+  border:1px solid rgba(64,160,255,0.04);
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.hero-label {
+  font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.4em;
+  color:var(--muted); margin-bottom:1rem; position:relative; z-index:2;
+  display:flex; align-items:center; gap:1.2rem; justify-content:center;
+}
+.hero-label::before,.hero-label::after {
+  content:''; display:inline-block; width:50px; height:1px;
+  background:linear-gradient(90deg, transparent, var(--muted));
+}
+.hero-label::after { background:linear-gradient(90deg, var(--muted), transparent); }
+
+.hero-title {
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.8rem,6vw,4rem); font-weight:700;
+  line-height:1.2; letter-spacing:0.05em;
+  background:linear-gradient(135deg, var(--cosmi) 0%, #ff80ff 30%, var(--shao) 60%, var(--keat) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  margin-bottom:0.5rem; position:relative; z-index:2;
+  filter:drop-shadow(0 0 30px rgba(192,64,255,0.4));
+}
+.hero-subtitle {
+  font-family:'Noto Serif JP',serif; font-weight:300;
+  font-size:clamp(0.9rem,2vw,1.1rem); letter-spacing:0.2em;
+  color:var(--muted); margin-bottom:1.5rem; position:relative; z-index:2;
+}
+.hero-desc {
+  font-size:0.85rem; color:var(--muted); line-height:1.95; max-width:540px;
+  font-family:'Noto Serif JP',serif; font-weight:300;
+  position:relative; z-index:2;
+}
+.hero-desc em { font-style:normal; color:var(--text); }
+
+/* color indicator strip */
+.color-strip {
+  position:relative; z-index:2;
+  display:flex; gap:0; margin-top:2rem; overflow:hidden; border-radius:2px;
+}
+.color-strip-seg {
+  height:3px; flex:1;
+  transition:flex 0.3s;
+}
+
+/* ── CHAR BLOCKS ── */
+.chars-wrap {
+  position:relative; z-index:1;
+  max-width:1100px; margin:0 auto;
+  padding:4rem 2rem 3rem;
+  display:flex; flex-direction:column; gap:0;
+}
+
+.char-block {
+  display:grid; grid-template-columns:260px 1fr;
+  gap:3rem; align-items:start;
+  padding:3.5rem 0;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.char-block.reverse { direction:rtl; }
+.char-block.reverse > * { direction:ltr; }
+
+/* glowing side accent */
+.char-block::before {
+  content:'';
+  position:absolute; left:-2rem; top:0; bottom:0; width:2px;
+  background:linear-gradient(to bottom, transparent, var(--c-main,var(--cosmi)), transparent);
+  opacity:0.4;
+}
+.char-block.reverse::before { left:auto; right:-2rem; }
+
+/* card */
+.char-img-frame {
+  position:relative; aspect-ratio:2/3;
+  border:1px solid var(--c-main,var(--cosmi));
+  background:var(--surface);
+  overflow:hidden;
+  box-shadow:0 0 60px rgba(0,0,0,0.6), 0 0 20px var(--c-glow,rgba(192,64,255,0.2));
+}
+.char-img-frame::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px; z-index:2;
+  background:linear-gradient(90deg,transparent,var(--c-main,var(--cosmi)),transparent);
+}
+.char-img-frame::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:80px; z-index:2;
+  background:linear-gradient(transparent, var(--surface));
+}
+.placeholder-inner {
+  width:100%; height:100%; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1rem; padding:2rem;
+}
+.placeholder-sigil {
+  font-size:4rem; opacity:0.1; color:var(--c-main,var(--cosmi)); line-height:1;
+  animation:sigil-pulse 4s ease-in-out infinite;
+}
+@keyframes sigil-pulse {
+  0%,100% { opacity:0.08; transform:scale(1); }
+  50%      { opacity:0.18; transform:scale(1.05); }
+}
+.placeholder-label {
+  font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.25em;
+  color:var(--c-main,var(--cosmi)); opacity:0.4; text-align:center; line-height:1.8;
+}
+/* order badge */
+.order-badge {
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.25em;
+  color:var(--c-main,var(--cosmi)); background:var(--bg);
+  padding:0.1rem 0.7rem; border:1px solid var(--c-main,var(--cosmi));
+  white-space:nowrap; z-index:3; opacity:0.8;
+}
+
+/* info */
+.char-info-col { padding-top:0.5rem; }
+.char-codename {
+  font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.3em;
+  color:var(--c-main,var(--cosmi)); margin-bottom:0.5rem;
+  display:flex; align-items:center; gap:0.8rem;
+  text-shadow:0 0 10px var(--c-glow,rgba(192,64,255,0.3));
+}
+.char-codename::after { content:''; flex:0 0 36px; height:1px; background:var(--c-main,var(--cosmi)); opacity:0.35; }
+
+.char-name-jp {
+  font-family:'Noto Serif JP',serif;
+  font-size:clamp(2rem,4.5vw,3rem); font-weight:700;
+  line-height:1.15; margin-bottom:0.2rem;
+  color:var(--text);
+}
+.char-name-sub {
+  font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.25em;
+  color:var(--c-main,var(--cosmi)); display:block; margin-bottom:0.3rem;
+  text-shadow:0 0 8px var(--c-glow,rgba(192,64,255,0.3));
+}
+.char-position {
+  font-size:0.72rem; color:var(--muted); letter-spacing:0.1em;
+  margin-bottom:1.2rem; display:flex; align-items:center; gap:0.5rem;
+}
+.char-position::before { content:''; width:16px; height:1px; background:var(--muted); opacity:0.4; }
+
+.char-catch {
+  font-family:'Noto Serif JP',serif; font-weight:300;
+  font-size:0.92rem; line-height:2.1;
+  border-left:2px solid var(--c-main,var(--cosmi));
+  padding:0.6rem 1rem; margin-bottom:1.2rem;
+  background:rgba(255,255,255,0.02); color:var(--text);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+}
+.char-personality {
+  font-size:0.83rem; color:var(--muted); line-height:1.9; margin-bottom:1.3rem;
+}
+
+/* henshin badge */
+.henshin-box {
+  border:1px solid var(--border2); border-radius:4px;
+  padding:0.9rem 1.1rem; margin-bottom:1.2rem;
+  background:rgba(255,255,255,0.02); position:relative; overflow:hidden;
+}
+.henshin-box::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:2px;
+  background:var(--c-main,var(--cosmi));
+  box-shadow:0 0 8px var(--c-glow,rgba(192,64,255,0.4));
+}
+.henshin-label {
+  font-family:'Cinzel',serif; font-size:0.56rem; letter-spacing:0.22em;
+  color:var(--c-main,var(--cosmi)); margin-bottom:0.35rem;
+}
+.henshin-name {
+  font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.15rem;
+}
+.henshin-arrow {
+  font-size:0.75rem; color:var(--muted); margin:0.2rem 0;
+  display:flex; align-items:center; gap:0.5rem;
+}
+.henshin-arrow::before { content:''; flex:0 0 20px; height:1px; background:var(--muted); opacity:0.3; }
+.henshin-omega {
+  font-size:0.95rem; font-weight:700;
+  background:linear-gradient(90deg, var(--c-main,var(--cosmi)), #fff);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+
+/* inner */
+.inner-box {
+  border:1px dashed rgba(255,80,80,0.2); border-radius:4px;
+  padding:0.8rem 1rem; margin-bottom:1.2rem;
+  background:rgba(255,30,30,0.03);
+}
+.inner-label {
+  font-family:'Cinzel',serif; font-size:0.54rem; letter-spacing:0.2em;
+  color:rgba(255,100,100,0.6); margin-bottom:0.3rem;
+}
+.inner-desc { font-size:0.78rem; color:var(--muted); line-height:1.7; }
+
+/* ── COMMON SECTION ── */
+.common-section {
+  position:relative; z-index:1;
+  max-width:1100px; margin:0 auto;
+  padding:0 2rem 5rem;
+}
+.common-title {
+  font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.3em;
+  color:var(--cosmi); margin-bottom:1.8rem;
+  display:flex; align-items:center; gap:1rem; text-transform:uppercase;
+}
+.common-title::after { content:''; flex:1; height:1px; background:var(--border2); }
+
+.common-card {
+  border:1px solid var(--border2); background:var(--surface); border-radius:6px;
+  padding:1.8rem 2rem;
+  box-shadow:0 0 40px rgba(192,64,255,0.05);
+}
+.common-card p { font-size:0.85rem; color:var(--muted); line-height:2; margin-bottom:0.8rem; }
+.common-card p:last-child { margin-bottom:0; }
+.common-card strong { color:var(--text); }
+.common-card em { font-style:normal; color:var(--cosmi); }
+
+/* ── FOOTER ── */
+footer {
+  position:relative; z-index:1;
+  border-top:1px solid var(--border2); padding:2.5rem 3rem;
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:1rem; background:rgba(5,2,8,0.95);
+}
+.footer-logo { font-family:'Noto Serif JP',serif; font-size:0.9rem; font-weight:700; color:var(--cosmi); }
+.footer-copy { font-size:0.7rem; color:var(--muted); letter-spacing:0.1em; }
+.footer-links { display:flex; gap:1.5rem; }
+.footer-links a { font-size:0.75rem; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:var(--cosmi); }
+
+@media(max-width:768px){
+  nav { padding:1rem 1.2rem; }
+  .chars-wrap { padding:2rem 1.2rem; }
+  .char-block,.char-block.reverse { grid-template-columns:1fr; direction:ltr; gap:2rem; padding:2.5rem 0; }
+  .char-img-frame { max-width:220px; margin:0 auto; }
+  .char-block::before { display:none; }
+  .common-section { padding:0 1.2rem 3rem; }
+  footer { padding:2rem 1.5rem; flex-direction:column; text-align:center; }
+  .footer-links { justify-content:center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">ELEMENT<span>ER</span></a>
+  <div class="nav-sns">
+    <a href="https://www.pixiv.net/novel/show.php?id=15118580" target="_blank">pixiv</a>
+    <a href="https://x.com/Grape100000" target="_blank">X (Twitter)</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-eye"></div>
+  <div class="breadcrumb" style="font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--muted);margin-bottom:1.5rem;position:relative;z-index:2;display:flex;align-items:center;gap:0.6rem;justify-content:center;">
+    <a href="index.html" style="color:var(--muted);text-decoration:none;">TOP</a>
+    <span style="opacity:0.4;">／</span>
+    <a href="characters.html" style="color:var(--muted);text-decoration:none;">キャラクター</a>
+    <span style="opacity:0.4;">／</span>
+    <span>冥闇の四姉妹</span>
+  </div>
+  <div class="hero-label">ANTAGONIST</div>
+  <h1 class="hero-title">The Four Sisters<br>of Dark</h1>
+  <p class="hero-subtitle">冥闇の四姉妹</p>
+  <p class="hero-desc">
+    「ヒメイダ様のため」という名目で動く四人。<br>
+    しかしその内面には<em>それぞれの個人的な情動・弱さ・葛藤</em>がある。<br>
+    一枚岩ではないが、姉妹間の家族愛と依存は深い。
+  </p>
+  <div class="color-strip">
+    <div class="color-strip-seg" style="background:var(--cosmi);"></div>
+    <div class="color-strip-seg" style="background:var(--keat);"></div>
+    <div class="color-strip-seg" style="background:var(--shao);"></div>
+    <div class="color-strip-seg" style="background:var(--mani);"></div>
+  </div>
+</div>
+
+<!-- CHARS -->
+<div class="chars-wrap">
+
+  <!-- ── コスミ ── -->
+  <div class="char-block" style="--c-main:var(--cosmi);--c-glow:rgba(192,64,255,0.25);">
+    <div class="char-img-col" style="position:relative;">
+      <div class="char-img-frame">
+        <span class="order-badge">FIRST · 長女</span>
+        <div class="placeholder-inner">
+          <div class="placeholder-sigil">✦</div>
+          <div class="placeholder-label">IMAGE COMING SOON<br>コスミ</div>
+        </div>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ GALAXY NOVA</div>
+      <div class="char-name-jp">コスミ</div>
+      <span class="char-name-sub">Cosmi</span>
+      <div class="char-position">四姉妹の長女 ／ 統率者 ／ カリスマ的存在</div>
+      <div class="char-catch">
+        「ヒメイダの意思を継ぐ者」として生きる。<br>
+        負けを認めることは、死を意味する。
+      </div>
+      <p class="char-personality">
+        常に冷静沈着で無駄を嫌い計画通りに物事を進める完全主義者。他者を「駒」として扱う傾向が強いが、妹たちに対してはかなりの情を持っている。絶対的な指導力と魔力量を持ちヒメイダに最も忠実。感情を捨てたように見えるが、それは目的に忠実なだけ。「支配する側」が当然という価値観で生きる。
+      </p>
+      <div class="henshin-box">
+        <div class="henshin-label">MAGICAL FORM</div>
+        <div class="henshin-name">ギャラクシー・ノヴァ</div>
+        <div class="henshin-arrow">パワーアップ</div>
+        <div class="henshin-omega">ギャラクシー・ノヴァ・オメガ</div>
+      </div>
+      <div class="inner-box">
+        <div class="inner-label">INNER CONFLICT</div>
+        <div class="inner-desc">高い知性とプライドの裏に、目的への執念。妹たちへの情が、唯一の「人間らしさ」として残っている。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── キート ── -->
+  <div class="char-block reverse" style="--c-main:var(--keat);--c-glow:rgba(32,216,160,0.2);">
+    <div class="char-img-col" style="position:relative;">
+      <div class="char-img-frame">
+        <span class="order-badge">SECOND · 次女</span>
+        <div class="placeholder-inner">
+          <div class="placeholder-sigil">⬡</div>
+          <div class="placeholder-label">IMAGE COMING SOON<br>キート</div>
+        </div>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ ANCIENT INSECT</div>
+      <div class="char-name-jp">キート</div>
+      <span class="char-name-sub">Keat</span>
+      <div class="char-position">次女 ／ 参謀・科学者 ／ 冷笑系</div>
+      <div class="char-catch">
+        エリカを創造した発案者。<br>
+        皮肉屋で冷徹。だが「見捨てられること」を恐れている。
+      </div>
+      <p class="char-personality">
+        技術と戦略の天才。ヒメイダの「娘」＝エリカを創造した発案者。感情よりも理性で動くタイプだが、歪んだ忠誠心と復讐心を内に秘めている。エリカを「道具」としか見ておらず、価値がなくなれば処分も辞さない。自分を含めた姉妹全員を「ヒメイダの手駒」として客観視している。
+      </p>
+      <div class="henshin-box">
+        <div class="henshin-label">MAGICAL FORM</div>
+        <div class="henshin-name">エンシェント・インセクト</div>
+      </div>
+      <div class="inner-box">
+        <div class="inner-label">INNER CONFLICT</div>
+        <div class="inner-desc">内面は繊細で、姉妹やヒメイダに「見捨てられる」ことへの恐怖を抱えている。自分の知性と成果への強い誇りが、その恐怖を隠す鎧になっている。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── シャオ ── -->
+  <div class="char-block" style="--c-main:var(--shao);--c-glow:rgba(255,64,64,0.2);">
+    <div class="char-img-col" style="position:relative;">
+      <div class="char-img-frame">
+        <span class="order-badge">THIRD · 三女</span>
+        <div class="placeholder-inner">
+          <div class="placeholder-sigil">☠</div>
+          <div class="placeholder-label">IMAGE COMING SOON<br>シャオ</div>
+        </div>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ ABYSS KRAKEN</div>
+      <div class="char-name-jp">シャオ</div>
+      <span class="char-name-sub">Shao</span>
+      <div class="char-position">三女 ／ 暴走系ファイター</div>
+      <div class="char-catch">
+        戦うことが「快楽」であり、生きる目的。<br>
+        コスミ姉に褒められたい、それだけでいい。
+      </div>
+      <p class="char-personality">
+        口が悪く粗暴。戦うことが「快楽」であり生きる目的になっている節も。ヒメイダに従っているのは信仰というより「コスミ姉に褒められたい」「家族に認められたい」という感情から。頭は切れるが感情優先で暴走しやすく戦場では最も危険な存在。過去に劣悪な家庭環境で育ち、情緒を正しく育てられなかった歪みがある。一見軽薄だが家族愛に飢えており、マニには比較的優しい。
+      </p>
+      <div class="henshin-box">
+        <div class="henshin-label">MAGICAL FORM</div>
+        <div class="henshin-name">アビス・クラーケン</div>
+      </div>
+      <div class="inner-box">
+        <div class="inner-label">INNER CONFLICT</div>
+        <div class="inner-desc">「楽しければいい」というスタンスながら、家族のためなら理不尽にも耐える。家族愛への飢えが、暴力性と表裏一体になっている。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── マニ ── -->
+  <div class="char-block reverse" style="--c-main:var(--mani);--c-glow:rgba(64,160,255,0.2);">
+    <div class="char-img-col" style="position:relative;">
+      <div class="char-img-frame">
+        <span class="order-badge">FOURTH · 四女</span>
+        <div class="placeholder-inner">
+          <div class="placeholder-sigil">◈</div>
+          <div class="placeholder-label">IMAGE COMING SOON<br>マニ</div>
+        </div>
+      </div>
+    </div>
+    <div class="char-info-col">
+      <div class="char-codename">◆ SKY EGRET</div>
+      <div class="char-name-jp">マニ</div>
+      <span class="char-name-sub">Mani</span>
+      <div class="char-position">四女 ／ 観察者・従順な末妹</div>
+      <div class="char-catch">
+        幼少期に全てを失い、姉たちに拾われた。<br>
+        だから最後は、姉の命令を優先する。
+      </div>
+      <p class="char-personality">
+        常に冷静で達観した態度を取るが、本質は「姉たちのために頑張りたい」という献身的な動機。幼少期にヒメイダに国を滅ぼされ家族も失い、姉たちに拾われた過去を持つ。表面上は飄々として敵に対しても皮肉混じりの冷静な口調を崩さない。優しさと非情の境界が曖昧。自分を「器用貧乏」だと自嘲する。姉妹の中で最もバランスが取れているが忠誠心は深く、過酷な拘束や孤独に耐える訓練を受けており精神耐性は最強クラス。
+      </p>
+      <div class="henshin-box">
+        <div class="henshin-label">MAGICAL FORM</div>
+        <div class="henshin-name">スカイ・イーグレット</div>
+      </div>
+      <div class="inner-box">
+        <div class="inner-label">INNER CONFLICT</div>
+        <div class="inner-desc">敵を殺すことに躊躇いはないが、それを正当化しない。「器用貧乏」という自嘲の裏に、全てを失った過去と姉たちへの深い依存がある。</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /chars-wrap -->
+
+<!-- COMMON SECTION -->
+<div class="common-section">
+  <div class="common-title">Four Sisters — What They Share</div>
+  <div class="common-card">
+    <p>全員が<strong>「ヒメイダ様のため」</strong>という名目で動いているが、その内面にはそれぞれの<em>個人的な情動・弱さ・葛藤</em>がある。</p>
+    <p><strong>エリカ（＝器）</strong>をどう扱うかが四人の思想を映し出しており、「道具」「家族」「破壊対象」としての見方が分かれる。</p>
+    <p>一枚岩ではないが、<strong>姉妹間の家族愛と依存は強く</strong>、それが物語の複雑さと人間臭さを生み出している。</p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">冥闇の四姉妹</div>
+  <div class="footer-links">
+    <a href="https://www.pixiv.net/novel/show.php?id=15118580" target="_blank">pixiv</a>
+    <a href="https://x.com/Grape100000" target="_blank">X (Twitter)</a>
+    <a href="characters.html">キャラクター一覧</a>
+    <a href="index.html">TOP</a>
+  </div>
+  <div class="footer-copy">© 俺ンジ / Elementer Project</div>
+</footer>
+
+</body>
+</html>
