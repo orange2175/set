@@ -547,9 +547,186 @@ footer {
   to   { transform: translateY(-12px) rotate(2deg); }
 }
 
+
+/* ── OPENING EFFECT ── */
+#opening-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: #000;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+}
+#opening-overlay.done {
+  opacity: 0;
+  pointer-events: none;
+}
+.opening-corner {
+  position: absolute; width: 28px; height: 28px;
+  border-color: #c084fc; border-style: solid;
+}
+.opening-corner.tl { top:16px; left:16px; border-width:1px 0 0 1px; }
+.opening-corner.tr { top:16px; right:16px; border-width:1px 1px 0 0; }
+.opening-corner.bl { bottom:16px; left:16px; border-width:0 0 1px 1px; }
+.opening-corner.br { bottom:16px; right:16px; border-width:0 1px 1px 0; }
+.opening-title {
+  font-family:'Cinzel',serif;
+  font-size:clamp(1rem,4vw,2rem);
+  letter-spacing:0.4em;
+  background:linear-gradient(135deg,#c084fc,#67e8f9,#f0abfc);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  text-align:center; position:relative; z-index:2;
+  animation:op-title 0.8s ease 0.3s both;
+}
+.opening-sub {
+  font-size:0.68rem; letter-spacing:0.3em; color:#8878aa;
+  margin-top:0.8rem; position:relative; z-index:2;
+  animation:op-title 0.6s ease 0.8s both;
+}
+.opening-tap {
+  font-size:0.6rem; letter-spacing:0.2em; color:#4a4060;
+  margin-top:2rem; position:relative; z-index:2;
+  animation:op-blink 1.5s ease 1.5s infinite;
+}
+.opening-bar {
+  position:absolute; bottom:0; left:0; height:2px;
+  background:linear-gradient(90deg,#c084fc,#67e8f9);
+  animation:op-bar 2.5s ease 0.2s forwards; width:0;
+}
+@keyframes op-title {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes op-bar { to { width:100%; } }
+@keyframes op-blink { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+/* ── NEWS TICKER ── */
+.news-ticker {
+  background: rgba(6,5,15,0.95);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0;
+  overflow: hidden;
+  position: relative; z-index: 1;
+}
+.news-ticker-inner {
+  display: flex; align-items: center;
+  white-space: nowrap;
+  animation: ticker-scroll 22s linear infinite;
+}
+@keyframes ticker-scroll {
+  from { transform: translateX(100vw); }
+  to   { transform: translateX(-100%); }
+}
+.ticker-label {
+  font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.2em;
+  background: var(--accent1); color: #000; font-weight: 700;
+  padding: 0.15rem 0.6rem; margin-right: 1.5rem; flex-shrink: 0;
+  border-radius: 2px;
+}
+.ticker-item {
+  font-size: 0.78rem; color: var(--text); letter-spacing: 0.06em;
+  margin-right: 3rem;
+}
+.ticker-item::before {
+  content: '◆ '; color: var(--accent1); font-size: 0.6rem;
+}
+.ticker-sep {
+  color: var(--border2); margin-right: 3rem;
+}
+
+/* ── IN-WORLD NEWS CARDS ── */
+#inworld-news {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 4rem 3rem;
+  position: relative; z-index: 1;
+}
+.inworld-inner { max-width: 1000px; margin: 0 auto; }
+.inworld-header {
+  display: flex; align-items: baseline; gap: 1rem; margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.inworld-tag {
+  font-size: 0.6rem; letter-spacing: 0.2em; font-weight: 700;
+  background: var(--accent1); color: var(--bg);
+  padding: 0.15rem 0.6rem; border-radius: 2px;
+}
+.inworld-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 700;
+}
+.inworld-note {
+  font-size: 0.68rem; color: var(--muted); margin-left: auto;
+  letter-spacing: 0.08em;
+}
+.inworld-grid {
+  display: flex; flex-direction: column; gap: 0.8rem;
+}
+.inworld-card { width: 100%; }
+.inworld-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+  cursor: default;
+}
+.inworld-card:hover {
+  border-color: var(--accent1);
+  transform: translateY(-3px);
+}
+.inworld-card-top {
+  padding: 1rem 1.1rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+.inworld-cat {
+  font-size: 0.6rem; letter-spacing: 0.18em;
+  color: var(--accent2); font-weight: 700; margin-bottom: 0.4rem;
+}
+.inworld-headline {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 0.95rem; font-weight: 700; line-height: 1.5;
+  color: var(--text);
+}
+.inworld-card-bot {
+  padding: 0.6rem 1.1rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.inworld-date {
+  font-size: 0.65rem; color: var(--muted);
+  font-family: 'Cinzel', serif; letter-spacing: 0.1em;
+}
+.inworld-source {
+  font-size: 0.62rem; color: var(--muted); letter-spacing: 0.08em;
+}
+
 </style>
 </head>
+    <div class="opening-line"></div>
+    <div class="opening-line"></div>
+    <div class="opening-line"></div>
+    <div class="opening-line"></div>
+  </div>
+  <div class="opening-corner tl"></div>
+  <div class="opening-corner tr"></div>
+  <div class="opening-corner bl"></div>
+  <div class="opening-corner br"></div>
+  <div class="opening-title">魔法少女 エレメンター</div>
+  <div class="opening-sub">MAGICAL GIRL ELEMENTER</div>
+  <div class="opening-bar"></div>
+</div>
+
 <body>
+<div id="opening-overlay">
+  <div class="opening-corner tl"></div>
+  <div class="opening-corner tr"></div>
+  <div class="opening-corner bl"></div>
+  <div class="opening-corner br"></div>
+  <div class="opening-title">魔法少女 エレメンター</div>
+  <div class="opening-sub">MAGICAL GIRL ELEMENTER</div>
+  <div class="opening-tap">TAP TO ENTER</div>
+  <div class="opening-bar"></div>
+</div>
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
 
@@ -561,6 +738,23 @@ footer {
     <a href="https://x.com/Grape100000" target="_blank">X (Twitter)</a>
   </div>
 </nav>
+
+<div class="news-ticker">
+  <div class="news-ticker-inner">
+    <span class="ticker-label">BREAKING</span>
+    <span class="ticker-item">プリンセスカンパニー 先月より大幅赤字</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item">治験募集 アットホームなお仕事です！</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item">水守スイ。ぬいぐるみの通信販売スタート</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item">プリンセスカンパニー 先月より大幅赤字</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item">治験募集 アットホームなお仕事です！</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item">水守スイ。ぬいぐるみの通信販売スタート</span>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="top">
@@ -620,23 +814,70 @@ footer {
     <h2 class="sec-title">新着情報</h2>
     <ul class="news-list">
       <li class="news-item">
-        <span class="news-date">2026.03.19</span>
+        <span class="news-date">2025.00.00</span>
         <span class="news-cat cat-story">UPDATE</span>
         <span class="news-text">サイトを公開しました</span>
       </li>
       <li class="news-item">
-        <span class="news-date">2026.03.19</span>
+        <span class="news-date">2025.00.00</span>
         <span class="news-cat cat-char">CHARACTER</span>
         <span class="news-text">キャラクター情報を追加予定</span>
       </li>
       <li class="news-item">
-        <span class="news-date">2026.03.19</span>
+        <span class="news-date">2025.00.00</span>
         <span class="news-cat cat-info">INFO</span>
-        <span class="news-text">pixivにて最新話公開予定</span>
+        <span class="news-text">pixivにて第一話公開</span>
       </li>
     </ul>
     <div class="news-more">
       <a class="link-more" href="#">もっと見る →</a>
+    </div>
+  </div>
+</section>
+
+
+<section id="inworld-news">
+  <div class="inworld-inner">
+    <div class="inworld-header">
+      <span class="inworld-tag">IN-WORLD NEWS</span>
+      <h2 class="inworld-title">劇中ニュース</h2>
+      <span class="inworld-note">※ フィクションです</span>
+    </div>
+    <div class="inworld-grid">
+
+      <div class="inworld-card">
+        <div class="inworld-card-top">
+          <div class="inworld-cat">ECONOMY · 経済</div>
+          <div class="inworld-headline">プリンセスカンパニー<br>先月より大幅赤字</div>
+        </div>
+        <div class="inworld-card-bot">
+          <span class="inworld-date">2024.11.08</span>
+          <span class="inworld-source">日刊フィクション</span>
+        </div>
+      </div>
+
+      <div class="inworld-card">
+        <div class="inworld-card-top">
+          <div class="inworld-cat">RECRUIT · 求人</div>
+          <div class="inworld-headline">【治験募集】<br>アットホームなお仕事です！</div>
+        </div>
+        <div class="inworld-card-bot">
+          <span class="inworld-date">2024.10.22</span>
+          <span class="inworld-source">求人フィクション</span>
+        </div>
+      </div>
+
+      <div class="inworld-card">
+        <div class="inworld-card-top">
+          <div class="inworld-cat">LIFESTYLE · ライフ</div>
+          <div class="inworld-headline">水守スイ。<br>ぬいぐるみの通信販売スタート</div>
+        </div>
+        <div class="inworld-card-bot">
+          <span class="inworld-date">2024.12.01</span>
+          <span class="inworld-source">生活フィクション</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -855,5 +1096,23 @@ document.querySelectorAll('.eq-bar').forEach(bar => {
 });
 </script>
 
+
+
+
+
+<script>
+(function() {
+  function closeOpening() {
+    var ov = document.getElementById('opening-overlay');
+    if (!ov) return;
+    ov.classList.add('done');
+    setTimeout(function() { if(ov.parentNode) ov.parentNode.removeChild(ov); }, 600);
+  }
+  // 3秒後に自動で消える
+  setTimeout(closeOpening, 3000);
+  // タップ/クリックでも消える
+  document.addEventListener('click', closeOpening, { once: true });
+})();
+</script>
 </body>
 </html>
